@@ -6,12 +6,25 @@ namespace Calc
     {
         static void Main(string[] args)
         {
-            string num1 = Console.ReadLine();
-            int a = int.Parse(num1);
+            string s1 = Console.ReadLine();
+            int a;
+            bool success = int.TryParse(s1, out a);
+            if (!success)
+            {
+                Console.WriteLine("Hiba: Csak egész számok adhatóak meg.");
+                return;
+            }
 
-            string num2 = Console.ReadLine();
-            int b = int.Parse(num2);
 
+            string s2 = Console.ReadLine();
+            int b;
+            success = int.TryParse(s2, out b);
+            if (!success)
+            {
+                Console.WriteLine("Hiba: Csak egész számok adhatóak meg.");
+                return;
+            }
+                        
             Console.WriteLine(a + b);
         }
     }
