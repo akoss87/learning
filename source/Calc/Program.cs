@@ -64,15 +64,12 @@ namespace Calc
                     result = a * b;
                     break;
                 case '/':
-                    try
-                    {
-                        result = a / b;
-                    }
-                    catch (DivideByZeroException)
+                    if (b == 0)
                     {
                         Console.WriteLine("Nullával osztás nincs értelmezve.");
                         return;
                     }
+                    result = a / b;
                     break;
                 default:
                     throw new InvalidOperationException("Elvileg erre az ágra soha nem kerülhet a végrehajtás.");
