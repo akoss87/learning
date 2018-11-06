@@ -1,3 +1,6 @@
+0 - false
+1 - true
+
 NOT | 0 | 1 |
 ------------
     | 1 | 0 |
@@ -11,7 +14,7 @@ OR  | 0 | 1 |
 ------------
   1 | 1 | 1 |
 
-C# operator: |, ||
+C# operator: | (eager), || (lazy)
 
 
 AND | 0 | 1 |
@@ -20,7 +23,7 @@ AND | 0 | 1 |
 ------------
   1 | 0 | 1 |
 
-C# operator: &, &&
+C# operator: & (eager), && (lazy)
 
 
 XOR | 0 | 1 |
