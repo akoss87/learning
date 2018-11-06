@@ -1,0 +1,12 @@
+﻿Debug
+* F5 - indítás/folytatás
+* Shift+F5 - leállítás
+* F10 - átlépés
+* F11 - belelépés
+* Shift+F11 - függvyénből kilépésig folytatja
+
+Refactor
+* Ctrl+R+R - átnevezés
+
+Formázás
+* Ctrl+K+D - az egész dok formázása

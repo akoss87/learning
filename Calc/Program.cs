@@ -11,9 +11,10 @@ namespace Calc
             Console.OutputEncoding = Encoding.UTF8;
 
             int a, b;
+            char op;
             Console.WriteLine("Adja meg az első számot:");
 
-            do
+            for (; ; )
             {
                 string s1 = Console.ReadLine();
                 bool success = int.TryParse(s1, out a);
@@ -23,11 +24,23 @@ namespace Calc
                 else
                     Console.WriteLine("Hiba: Csak egész számok adhatóak meg.");
             }
-            while (true);
+
+            Console.WriteLine("Adja meg a műveletet:");
+            while (true)
+            {
+                string opString = Console.ReadLine();
+                if (opString.Length != 1)
+                    continue;
+
+                op = opString[0];
+
+                if (op == '+' || op == '-' || op == '*' || op == '/')
+                    break;
+            }
 
             Console.WriteLine("Adja meg a másik számot:");
 
-            do
+            for (; ; )
             {
                 string s2 = Console.ReadLine();
                 bool success = int.TryParse(s2, out b);
@@ -35,12 +48,37 @@ namespace Calc
                     break;
                 else
                     Console.WriteLine("Hiba: Csak egész számok adhatóak meg.");
-
             }
-            while (true);
 
+            int result;
 
-            Console.WriteLine(a + b);
+            switch (op)
+            {
+                case '+':
+                    result = a + b;
+                    break;
+                case '-':
+                    result = a - b;
+                    break;
+                case '*':
+                    result = a * b;
+                    break;
+                case '/':
+                    try
+                    {
+                        result = a / b;
+                    }
+                    catch (DivideByZeroException)
+                    {
+                        Console.WriteLine("Nullával osztás nincs értelmezve.");
+                        return;
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException("Elvileg erre az ágra soha nem kerülhet a végrehajtás.");
+            }
+
+            Console.WriteLine(result);
         }
     }
 }
