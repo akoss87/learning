@@ -12,6 +12,22 @@ namespace ParseInt
             ExpectingDigit = 3
         }
 
+        static bool IsHexDigit(char c)
+        {
+            return char.IsDigit(c) || ('A' <= c && c <= 'F') || ('a' <= c && c <= 'f');
+        }
+
+        static int GetDigitValue(char c)
+        {
+            if (c >= 'a')
+                return c - 87;
+
+            if (c >= 'A')
+                return c - 55;
+
+            return c - '0';
+        }
+
         static bool TryParseInt32(string input, out int value)
         {
             value = 0;
@@ -36,9 +52,9 @@ namespace ParseInt
                             isNegative = true;
                             state = ParseState.MinusSignRead;
                         }
-                        else if (char.IsDigit(c))
+                        else if (IsHexDigit(c))
                         {
-                            accumulator = accumulator * 10 + (c - '0');
+                            accumulator = accumulator * 16 + GetDigitValue(c);
                             state = ParseState.ExpectingDigit;
                         }
                         else
@@ -46,9 +62,9 @@ namespace ParseInt
 
                         break;
                     case ParseState.PlusSignRead:
-                        if (char.IsDigit(c))
+                        if (IsHexDigit(c))
                         {
-                            accumulator = accumulator * 10 + (c - '0');
+                            accumulator = accumulator * 16 + GetDigitValue(c);
                             state = ParseState.ExpectingDigit;
                         }
                         else
@@ -56,9 +72,9 @@ namespace ParseInt
 
                         break;
                     case ParseState.MinusSignRead:
-                        if (char.IsDigit(c))
+                        if (IsHexDigit(c))
                         {
-                            accumulator = accumulator * 10 + (c - '0');
+                            accumulator = accumulator * 16 + GetDigitValue(c);
                             state = ParseState.ExpectingDigit;
                         }
                         else
@@ -66,8 +82,8 @@ namespace ParseInt
 
                         break;
                     case ParseState.ExpectingDigit:
-                        if (char.IsDigit(c))
-                            accumulator = accumulator * 10 + (c - '0');
+                        if (IsHexDigit(c))
+                            accumulator = accumulator * 16 + GetDigitValue(c);
                         else
                             return false;
 
