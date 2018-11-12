@@ -28,6 +28,20 @@ namespace ParseInt
             return c - '0';
         }
 
+        static bool ProcessDigit(ref int accumulator, char c)
+        {
+            try
+            {
+                accumulator = checked(accumulator * 16 - GetDigitValue(c));
+            }
+            catch (OverflowException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         static bool TryParseInt32(string input, out int value)
         {
             value = 0;
@@ -54,7 +68,8 @@ namespace ParseInt
                         }
                         else if (IsHexDigit(c))
                         {
-                            accumulator = accumulator * 16 + GetDigitValue(c);
+                            if (!ProcessDigit(ref accumulator, c))
+                                return false;
                             state = ParseState.ExpectingDigit;
                         }
                         else
@@ -64,7 +79,8 @@ namespace ParseInt
                     case ParseState.PlusSignRead:
                         if (IsHexDigit(c))
                         {
-                            accumulator = accumulator * 16 + GetDigitValue(c);
+                            if (!ProcessDigit(ref accumulator, c))
+                                return false;
                             state = ParseState.ExpectingDigit;
                         }
                         else
@@ -74,7 +90,8 @@ namespace ParseInt
                     case ParseState.MinusSignRead:
                         if (IsHexDigit(c))
                         {
-                            accumulator = accumulator * 16 + GetDigitValue(c);
+                            if (!ProcessDigit(ref accumulator, c))
+                                return false;
                             state = ParseState.ExpectingDigit;
                         }
                         else
@@ -83,7 +100,10 @@ namespace ParseInt
                         break;
                     case ParseState.ExpectingDigit:
                         if (IsHexDigit(c))
-                            accumulator = accumulator * 16 + GetDigitValue(c);
+                        {
+                            if (!ProcessDigit(ref accumulator, c))
+                                return false;
+                        }
                         else
                             return false;
 
@@ -99,7 +119,14 @@ namespace ParseInt
                     //else
                     //    value = accumulator;
                     // vagy rövidebben:
-                    value = isNegative ? -accumulator : accumulator;
+                    try
+                    {
+                        value = isNegative ? accumulator : checked(-accumulator);
+                    }
+                    catch (OverflowException)
+                    {
+                        return false;
+                    }
                     return true;
                 default:
                     return false;
@@ -119,7 +146,7 @@ namespace ParseInt
             }
             else
             {
-                Console.WriteLine("Hibás a megadott szám.");
+                Console.WriteLine("A megadott szám hibás formátumú vagy nem fér bele az Int32 típus tartományába.");
             }
         }
     }
