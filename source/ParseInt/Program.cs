@@ -12,27 +12,25 @@ namespace ParseInt
             ExpectingDigit = 3
         }
 
-        static bool IsHexDigit(char c)
-        {
-            return char.IsDigit(c) || ('A' <= c && c <= 'F') || ('a' <= c && c <= 'f');
-        }
-
         static int GetDigitValue(char c)
         {
-            if (c >= 'a')
-                return c - 87;
+            if (char.IsDigit(c))
+                return c - '0';
 
-            if (c >= 'A')
+            if ('A' <= c && c <= 'F')
                 return c - 55;
 
-            return c - '0';
+            if ('a' <= c && c <= 'f')
+                return c - 87;
+
+            return -1;
         }
 
-        static bool ProcessDigit(ref int accumulator, char c)
+        static bool ProcessDigit(ref int accumulator, int digitValue)
         {
             try
             {
-                accumulator = checked(accumulator * 16 - GetDigitValue(c));
+                accumulator = checked(accumulator * 16 - digitValue);
             }
             catch (OverflowException)
             {
@@ -49,6 +47,7 @@ namespace ParseInt
             int accumulator = 0;
             bool isNegative = false;
             ParseState state = ParseState.ExpectingSignOrDigit;
+            int digitValue;
 
             for (int i = 0; i < input.Length; i++)
             {
@@ -66,9 +65,9 @@ namespace ParseInt
                             isNegative = true;
                             state = ParseState.MinusSignRead;
                         }
-                        else if (IsHexDigit(c))
+                        else if ((digitValue = GetDigitValue(c)) >= 0)
                         {
-                            if (!ProcessDigit(ref accumulator, c))
+                            if (!ProcessDigit(ref accumulator, digitValue))
                                 return false;
                             state = ParseState.ExpectingDigit;
                         }
@@ -77,9 +76,9 @@ namespace ParseInt
 
                         break;
                     case ParseState.PlusSignRead:
-                        if (IsHexDigit(c))
+                        if ((digitValue = GetDigitValue(c)) >= 0)
                         {
-                            if (!ProcessDigit(ref accumulator, c))
+                            if (!ProcessDigit(ref accumulator, digitValue))
                                 return false;
                             state = ParseState.ExpectingDigit;
                         }
@@ -88,9 +87,9 @@ namespace ParseInt
 
                         break;
                     case ParseState.MinusSignRead:
-                        if (IsHexDigit(c))
+                        if ((digitValue = GetDigitValue(c)) >= 0)
                         {
-                            if (!ProcessDigit(ref accumulator, c))
+                            if (!ProcessDigit(ref accumulator, digitValue))
                                 return false;
                             state = ParseState.ExpectingDigit;
                         }
@@ -99,9 +98,9 @@ namespace ParseInt
 
                         break;
                     case ParseState.ExpectingDigit:
-                        if (IsHexDigit(c))
+                        if ((digitValue = GetDigitValue(c)) >= 0)
                         {
-                            if (!ProcessDigit(ref accumulator, c))
+                            if (!ProcessDigit(ref accumulator, digitValue))
                                 return false;
                         }
                         else
