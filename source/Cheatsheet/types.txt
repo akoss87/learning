@@ -20,4 +20,9 @@ Primitive types:
 Enum:
 enumeration of integral values
 
-enum {name}[ : {type}] (default: int)
+Syntax: enum {Name}[ : {type}] (default: int)
+
+Delegate:
+function type
+
+Syntax: delegate {return_type} {Name}((arg_type arg_name)*)

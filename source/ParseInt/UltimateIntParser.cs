@@ -2,7 +2,7 @@
 
 namespace ParseInt
 {
-    static class BinParser
+    static class UltimateIntParser
     {
         enum ParseState
         {
@@ -12,7 +12,9 @@ namespace ParseInt
             ExpectingDigit = 3
         }
 
-        static int GetDigitValue(char c)
+        delegate int DigitValueGetter(char c);
+
+        static int GetBinDigitValue(char c)
         {
             if (c == '0')
                 return 0;
@@ -23,11 +25,33 @@ namespace ParseInt
             return -1;
         }
 
-        static bool ProcessDigit(ref int accumulator, int digitValue)
+        static int GetDecDigitValue(char c)
+        {
+            if (char.IsDigit(c))
+                return c - '0';
+
+            return -1;
+        }
+
+        static int GetHexDigitValue(char c)
+        {
+            if (char.IsDigit(c))
+                return c - '0';
+
+            if ('A' <= c && c <= 'F')
+                return c - 55;
+
+            if ('a' <= c && c <= 'f')
+                return c - 87;
+
+            return -1;
+        }
+
+        static bool ProcessDigit(ref int accumulator, int digitValue, int @base)
         {
             try
             {
-                accumulator = checked(accumulator * 2 - digitValue);
+                accumulator = checked(accumulator * @base - digitValue);
             }
             catch (OverflowException)
             {
@@ -37,8 +61,27 @@ namespace ParseInt
             return true;
         }
 
-        public static bool TryParse(string input, out int value)
+        public static bool TryParse(string input, int @base, out int value)
         {
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+
+            DigitValueGetter getDigitValue;
+            switch (@base)
+            {
+                case 2:
+                    getDigitValue = GetBinDigitValue;
+                    break;
+                case 10:
+                    getDigitValue = GetDecDigitValue;
+                    break;
+                case 16:
+                    getDigitValue = GetHexDigitValue;
+                    break;
+                default:
+                    throw new ArgumentException("Base not supported.", nameof(@base));
+            }
+
             value = 0;
 
             int accumulator = 0;
@@ -62,9 +105,9 @@ namespace ParseInt
                             isNegative = true;
                             state = ParseState.MinusSignRead;
                         }
-                        else if ((digitValue = GetDigitValue(c)) >= 0)
+                        else if ((digitValue = getDigitValue(c)) >= 0)
                         {
-                            if (!ProcessDigit(ref accumulator, digitValue))
+                            if (!ProcessDigit(ref accumulator, digitValue, @base))
                                 return false;
                             state = ParseState.ExpectingDigit;
                         }
@@ -73,9 +116,9 @@ namespace ParseInt
 
                         break;
                     case ParseState.PlusSignRead:
-                        if ((digitValue = GetDigitValue(c)) >= 0)
+                        if ((digitValue = getDigitValue(c)) >= 0)
                         {
-                            if (!ProcessDigit(ref accumulator, digitValue))
+                            if (!ProcessDigit(ref accumulator, digitValue, @base))
                                 return false;
                             state = ParseState.ExpectingDigit;
                         }
@@ -84,9 +127,9 @@ namespace ParseInt
 
                         break;
                     case ParseState.MinusSignRead:
-                        if ((digitValue = GetDigitValue(c)) >= 0)
+                        if ((digitValue = getDigitValue(c)) >= 0)
                         {
-                            if (!ProcessDigit(ref accumulator, digitValue))
+                            if (!ProcessDigit(ref accumulator, digitValue, @base))
                                 return false;
                             state = ParseState.ExpectingDigit;
                         }
@@ -95,9 +138,9 @@ namespace ParseInt
 
                         break;
                     case ParseState.ExpectingDigit:
-                        if ((digitValue = GetDigitValue(c)) >= 0)
+                        if ((digitValue = getDigitValue(c)) >= 0)
                         {
-                            if (!ProcessDigit(ref accumulator, digitValue))
+                            if (!ProcessDigit(ref accumulator, digitValue, @base))
                                 return false;
                         }
                         else

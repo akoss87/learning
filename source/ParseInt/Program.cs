@@ -11,7 +11,7 @@ namespace ParseInt
             //int value; 
             //if (TryParse(input, out value))
             // vagy rövidebben:
-            if (BinParser.TryParse(input, out int value))
+            if (UltimateIntParser.TryParse(input, 2, out int value))
             {
                 Console.WriteLine("A szám értéke: {0}", value);
             }
