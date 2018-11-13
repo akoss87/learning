@@ -25,4 +25,4 @@ Syntax: enum {Name}[ : {type}] (default: int)
 Delegate:
 function type
 
-Syntax: delegate {return_type} {Name}((arg_type arg_name)*)
+Syntax: delegate {return_type} {Name}({arg_type arg_name}, {arg_type arg_name}, ...)
