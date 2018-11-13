@@ -8,12 +8,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cheatsheet", "Cheatsheet", "{00FFF9BE-8123-4B28-946F-D7A389062A3B}"
 	ProjectSection(SolutionItems) = preProject
 		Cheatsheet\truthtables.txt = Cheatsheet\truthtables.txt
+		Cheatsheet\types.txt = Cheatsheet\types.txt
 		Cheatsheet\vskeys.txt = Cheatsheet\vskeys.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RandomGame", "RandomGame\RandomGame.csproj", "{B10DA673-BD97-4DD5-B57B-90FA54B437C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParseInt", "ParseInt\ParseInt.csproj", "{9DA0931A-F630-4431-A511-E32244CAFF1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseInt", "ParseInt\ParseInt.csproj", "{9DA0931A-F630-4431-A511-E32244CAFF1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

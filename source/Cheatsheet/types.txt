@@ -1,0 +1,23 @@
+Primitive types:
+* bool (System.Boolean) - boolean (true/false)
+
+* sbyte (System.Byte) - signed 8bit integer
+* byte (System.SByte) - unsigned 8bit integer
+* short (System.Int16) - signed 16bit integer
+* ushort (System.UInt16) - unsigned 16bit integer
+* int (System.Int32) - signed 32bit integer
+* uint (System.UInt32) - unsigned 32bit integer
+* long (System.Int64) - signed 64bit integer
+* ulong (System.UInt64) - unsigned 64bit integer
+
+* float (System.Single) - single-precision floating-point number
+* double (System.Double) - double-precision floating-point number
+* decimal (System.Decimal) - decimal number (money)
+
+* char (System.Char) - 16bit unicode character
+* string (System.String) - string of unicode chars
+
+Enum:
+enumeration of integral values
+
+enum {name}[ : {type}] (default: int)
