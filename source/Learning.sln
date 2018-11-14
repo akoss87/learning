@@ -7,6 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calc", "Calc\Calc.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cheatsheet", "Cheatsheet", "{00FFF9BE-8123-4B28-946F-D7A389062A3B}"
 	ProjectSection(SolutionItems) = preProject
+		Cheatsheet\flowcontrol.txt = Cheatsheet\flowcontrol.txt
 		Cheatsheet\truthtables.txt = Cheatsheet\truthtables.txt
 		Cheatsheet\types.txt = Cheatsheet\types.txt
 		Cheatsheet\vskeys.txt = Cheatsheet\vskeys.txt
@@ -15,6 +16,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RandomGame", "RandomGame\RandomGame.csproj", "{B10DA673-BD97-4DD5-B57B-90FA54B437C8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseInt", "ParseInt\ParseInt.csproj", "{9DA0931A-F630-4431-A511-E32244CAFF1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SumProd", "SumProd\SumProd.csproj", "{C04914C9-ED64-4F3B-B9BF-9C7E6ED723D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +37,10 @@ Global
 		{9DA0931A-F630-4431-A511-E32244CAFF1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DA0931A-F630-4431-A511-E32244CAFF1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DA0931A-F630-4431-A511-E32244CAFF1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C04914C9-ED64-4F3B-B9BF-9C7E6ED723D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C04914C9-ED64-4F3B-B9BF-9C7E6ED723D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C04914C9-ED64-4F3B-B9BF-9C7E6ED723D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C04914C9-ED64-4F3B-B9BF-9C7E6ED723D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
