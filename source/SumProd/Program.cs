@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace SumProd
 {
@@ -6,7 +7,25 @@ namespace SumProd
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            int sum = 0;
+            int part;
+
+            while (true)
+            {
+                string readNum = Console.ReadLine();
+                if (readNum == "")
+                {
+                    Console.WriteLine(sum);
+                    return;
+                }
+                if (!int.TryParse(readNum, out part))
+                {
+                    Console.WriteLine("Hibás érték.");
+                    return;
+                }
+                sum = sum + part;
+            }
         }
+
     }
 }
