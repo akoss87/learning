@@ -7,10 +7,10 @@ namespace SumProd
     {
         static void Main(string[] args)
         {
-            int sum = 0;
+            int sum = 1;
             int part;
-
             string readNum;
+            
             while (!string.IsNullOrWhiteSpace(readNum = Console.ReadLine()))
             {
                 if (!int.TryParse(readNum, out part))
@@ -18,7 +18,7 @@ namespace SumProd
                     Console.WriteLine("Hibás érték.");
                     continue;
                 }
-                sum += part;
+                sum *= part;
             }
 
             Console.WriteLine(sum);
