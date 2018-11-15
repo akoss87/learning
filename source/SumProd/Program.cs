@@ -15,7 +15,7 @@ namespace SumProd
             {
                 if (!int.TryParse(readNum, out part))
                 {
-                    Console.WriteLine("Hibás érték.");
+                    Console.Error.WriteLine("Hibás érték.");
                     continue;
                 }
                 sum *= part;
