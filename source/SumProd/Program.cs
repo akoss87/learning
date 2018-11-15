@@ -10,22 +10,18 @@ namespace SumProd
             int sum = 0;
             int part;
 
-            while (true)
+            string readNum;
+            while (!string.IsNullOrWhiteSpace(readNum = Console.ReadLine()))
             {
-                string readNum = Console.ReadLine();
-                if (readNum == "")
-                {
-                    Console.WriteLine(sum);
-                    return;
-                }
                 if (!int.TryParse(readNum, out part))
                 {
                     Console.WriteLine("Hibás érték.");
-                    return;
+                    continue;
                 }
-                sum = sum + part;
+                sum += part;
             }
-        }
 
+            Console.WriteLine(sum);
+        }
     }
 }
