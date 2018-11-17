@@ -5,6 +5,18 @@ namespace SumProd
 {
     class Program
     {
+        delegate int Operation(int a, int b);
+
+        static int Sum(int a, int b)
+        {
+            return a + b;
+        }
+
+        static int Prod(int a, int b)
+        {
+            return a * b;
+        }
+
         static void Main(string[] args)
         {
             if (args.Length <= 0)
@@ -14,10 +26,17 @@ namespace SumProd
             }
 
             int result;
-            if (args[0] == "sum")
+            Operation operation;
+            if ((args[0] == "sum") || (args[0] == "+"))
+            {
                 result = 0;
-            else if (args[0] == "prod")
+                operation = Sum;
+            }
+            else if ((args[0] == "prod") || (args[0] == "*"))
+            {
                 result = 1;
+                operation = Prod;
+            }
             else
             {
                 Console.Error.WriteLine("Hibás érték.");
@@ -34,10 +53,8 @@ namespace SumProd
                     Console.Error.WriteLine("Hibás érték.");
                     continue;
                 }
-                if (args[0] == "sum")
-                    result += part;
-                else if (args[0] == "prod")
-                    result *= part;
+
+                result = operation(result, part);
             }
 
             Console.WriteLine(result);
