@@ -5,16 +5,16 @@ namespace SumProd
 {
     class Program
     {
-        delegate int Operation(int a, int b);
+        delegate void Operation(ref int result, int value);
 
-        static int Sum(int a, int b)
+        static void Sum(ref int result, int value)
         {
-            return a + b;
+            result += value;
         }
 
-        static int Prod(int a, int b)
+        static void Prod(ref int result, int value)
         {
-            return a * b;
+            result *= value;
         }
 
         static void Main(string[] args)
@@ -56,7 +56,7 @@ namespace SumProd
                     continue;
                 }
 
-                result = operation(result, part);
+                operation(ref result, part);
             }
 
             Console.WriteLine(result);
