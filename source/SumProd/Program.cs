@@ -27,20 +27,22 @@ namespace SumProd
 
             int result;
             Operation operation;
-            if ((args[0] == "sum") || (args[0] == "+"))
+
+            switch (args[0].ToLowerInvariant())
             {
-                result = 0;
-                operation = Sum;
-            }
-            else if ((args[0] == "prod") || (args[0] == "*"))
-            {
-                result = 1;
-                operation = Prod;
-            }
-            else
-            {
-                Console.Error.WriteLine("Hibás érték.");
-                return;
+                case "sum":
+                case "+":
+                    result = 0;
+                    operation = Sum;
+                    break;
+                case "prod":
+                case "*":
+                    result = 1;
+                    operation = Prod;
+                    break;
+                default:
+                    Console.Error.WriteLine("Hibás érték.");
+                    return;
             }
 
             int part;
