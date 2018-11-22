@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RandomGame", "RandomGame\Ra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SumProd", "SumProd\SumProd.csproj", "{C04914C9-ED64-4F3B-B9BF-9C7E6ED723D3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleLibrary.Test", "TestingIntro\SampleLibrary.Test.csproj", "{E9EA7795-3933-47C6-B0F6-568E373338A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleLibrary.Test", "SampleLibrary.Test\SampleLibrary.Test.csproj", "{E9EA7795-3933-47C6-B0F6-568E373338A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLibrary", "SampleLibrary\SampleLibrary.csproj", "{01A0DB8E-3EAD-4F5B-BF82-6AECC708BBAA}"
 EndProject
