@@ -1,4 +1,6 @@
-﻿namespace TestingIntro
+﻿using System;
+
+namespace SampleLibrary
 {
     public delegate bool Match(int value);
 
@@ -6,6 +8,12 @@
     {
         public static int FindIndex(int[] array, Match match)
         {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array));
+
+            if (match == null)
+                throw new ArgumentNullException(nameof(match));
+
             for (int i = 0; i < array.Length; i++)
                 if (match(array[i]))
                     return i;

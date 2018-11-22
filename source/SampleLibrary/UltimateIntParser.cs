@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ParseInt
+namespace SampleLibrary
 {
     static class UltimateIntParser
     {
