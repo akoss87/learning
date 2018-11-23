@@ -2,7 +2,7 @@
 
 namespace SampleLibrary
 {
-    static class UltimateIntParser
+    public static class UltimateIntParser
     {
         enum ParseState
         {
