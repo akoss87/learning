@@ -9,7 +9,7 @@ namespace SampleLibrary
         public static string IntToRoman(int value)
         {
             if (value == 0)
-                return "";
+                return string.Empty;
 
             // todo: negatív számok
             if (value < 0)
@@ -25,9 +25,9 @@ namespace SampleLibrary
 
             if (value >= 100)
             {
-                var count = Math.DivRem(value, 100, out value);
+                var digit = Math.DivRem(value, 100, out value);
 
-                switch (count)
+                switch (digit)
                 {
                     case 1:
                         result.Append('C');
@@ -61,9 +61,9 @@ namespace SampleLibrary
 
             if (value >= 10)
             {
-                var count = Math.DivRem(value, 10, out value);
+                var digit = Math.DivRem(value, 10, out value);
 
-                switch (count)
+                switch (digit)
                 {
                     case 1:
                         result.Append('X');
