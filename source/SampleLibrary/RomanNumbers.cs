@@ -1,74 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace SampleLibrary
 {
     public static class RomanNumbers
     {
-        static void ProcessDigitCore(int digit, char unit, char unitX5, char unitX10, StringBuilder builder)
-        {
-            switch (digit)
-            {
-                case 1:
-                    builder.Append(unit);
-                    break;
-                case 2:
-                    builder.Append(unit, 2);
-                    break;
-                case 3:
-                    builder.Append(unit, 3);
-                    break;
-                case 4:
-                    builder.Append(unit).Append(unitX5);
-                    break;
-                case 5:
-                    builder.Append(unitX5);
-                    break;
-                case 6:
-                    builder.Append(unitX5).Append(unit);
-                    break;
-                case 7:
-                    builder.Append(unitX5).Append(unit, 2);
-                    break;
-                case 8:
-                    builder.Append(unitX5).Append(unit, 3);
-                    break;
-                case 9:
-                    builder.Append(unit).Append(unitX10);
-                    break;
-            }
-        }
+        static readonly int[] s_numberLengths = { 0, 1, 2, 3, 2, 1, 2, 3, 4, 2 };
 
-        static void ProcessDigit(ref int value, int divisor, char unit, char unitX5, char unitX10, StringBuilder builder)
+        static readonly Action<StringBuilder, char, char, char>[] s_digitAppenders =
         {
-            if (value >= divisor)
-            {
-                var digit = Math.DivRem(value, divisor, out value);
-                ProcessDigitCore(digit, unit, unitX5, unitX10, builder);
-            }
-        }
+            (builder, unit, unitX5, unitX10) => { },
+            (builder, unit, unitX5, unitX10) => builder.Append(unit),
+            (builder, unit, unitX5, unitX10) => builder.Append(unit,2),
+            (builder, unit, unitX5, unitX10) => builder.Append(unit,3),
+            (builder, unit, unitX5, unitX10) => builder.Append(unit).Append(unitX5),
+            (builder, unit, unitX5, unitX10) => builder.Append(unitX5),
+            (builder, unit, unitX5, unitX10) => builder.Append(unitX5).Append(unit),
+            (builder, unit, unitX5, unitX10) => builder.Append(unitX5).Append(unit, 2),
+            (builder, unit, unitX5, unitX10) => builder.Append(unitX5).Append(unit, 3),
+            (builder, unit, unitX5, unitX10) => builder.Append(unit).Append(unitX10),
+        };
 
         public static string IntToRoman(int value)
         {
             if (value == 0)
                 return string.Empty;
 
-            // todo: negatív számok
             if (value < 0)
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException(nameof(value));
 
-            StringBuilder result = new StringBuilder();
+            int thousandsCount = value >= 1000 ? Math.DivRem(value, 1000, out value) : 0;
+            int hundredsDigit = value >= 100 ? Math.DivRem(value, 100, out value) : 0;
+            int tensDigit = value >= 10 ? Math.DivRem(value, 10, out value) : 0;
 
-            if (value >= 1000)
-            {
-                var count = Math.DivRem(value, 1000, out value);
-                result.Append('M', count);
-            }
+            int numberLength = thousandsCount + s_numberLengths[hundredsDigit] + s_numberLengths[tensDigit] + s_numberLengths[value];
 
-            ProcessDigit(ref value, 100, 'C', 'D', 'M', result);
-            ProcessDigit(ref value, 10, 'X', 'L', 'C', result);
-            ProcessDigitCore(value, 'I', 'V', 'X', result);
+            StringBuilder result = new StringBuilder(numberLength);
+
+            result.Append('M', thousandsCount);
+            s_digitAppenders[hundredsDigit](result, 'C', 'D', 'M');
+            s_digitAppenders[tensDigit](result, 'X', 'L', 'C');
+            s_digitAppenders[value](result, 'I', 'V', 'X');
 
             return result.ToString();
         }
