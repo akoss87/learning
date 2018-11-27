@@ -6,6 +6,49 @@ namespace SampleLibrary
 {
     public static class RomanNumbers
     {
+        static void ProcessDigitCore(int digit, char unit, char unitX5, char unitX10, StringBuilder builder)
+        {
+            switch (digit)
+            {
+                case 1:
+                    builder.Append(unit);
+                    break;
+                case 2:
+                    builder.Append(unit, 2);
+                    break;
+                case 3:
+                    builder.Append(unit, 3);
+                    break;
+                case 4:
+                    builder.Append(unit).Append(unitX5);
+                    break;
+                case 5:
+                    builder.Append(unitX5);
+                    break;
+                case 6:
+                    builder.Append(unitX5).Append(unit);
+                    break;
+                case 7:
+                    builder.Append(unitX5).Append(unit, 2);
+                    break;
+                case 8:
+                    builder.Append(unitX5).Append(unit, 3);
+                    break;
+                case 9:
+                    builder.Append(unit).Append(unitX10);
+                    break;
+            }
+        }
+
+        static void ProcessDigit(ref int value, int divisor, char unit, char unitX5, char unitX10, StringBuilder builder)
+        {
+            if (value >= divisor)
+            {
+                var digit = Math.DivRem(value, divisor, out value);
+                ProcessDigitCore(digit, unit, unitX5, unitX10, builder);
+            }
+        }
+
         public static string IntToRoman(int value)
         {
             if (value == 0)
@@ -23,108 +66,9 @@ namespace SampleLibrary
                 result.Append('M', count);
             }
 
-            if (value >= 100)
-            {
-                var digit = Math.DivRem(value, 100, out value);
-
-                switch (digit)
-                {
-                    case 1:
-                        result.Append('C');
-                        break;
-                    case 2:
-                        result.Append('C', 2);
-                        break;
-                    case 3:
-                        result.Append('C', 3);
-                        break;
-                    case 4:
-                        result.Append('C').Append('D');
-                        break;
-                    case 5:
-                        result.Append('D');
-                        break;
-                    case 6:
-                        result.Append('D').Append('C');
-                        break;
-                    case 7:
-                        result.Append('D').Append('C', 2);
-                        break;
-                    case 8:
-                        result.Append('D').Append('C', 3);
-                        break;
-                    case 9:
-                        result.Append('C').Append('M');
-                        break;
-                }
-            }
-
-            if (value >= 10)
-            {
-                var digit = Math.DivRem(value, 10, out value);
-
-                switch (digit)
-                {
-                    case 1:
-                        result.Append('X');
-                        break;
-                    case 2:
-                        result.Append('X', 2);
-                        break;
-                    case 3:
-                        result.Append('X', 3);
-                        break;
-                    case 4:
-                        result.Append('X').Append('L');
-                        break;
-                    case 5:
-                        result.Append('L');
-                        break;
-                    case 6:
-                        result.Append('L').Append('X');
-                        break;
-                    case 7:
-                        result.Append('L').Append('X', 2);
-                        break;
-                    case 8:
-                        result.Append('L').Append('X', 3);
-                        break;
-                    case 9:
-                        result.Append('X').Append('C');
-                        break;
-                }
-            }
-
-            switch (value)
-            {
-                case 1:
-                    result.Append('I');
-                    break;
-                case 2:
-                    result.Append('I', 2);
-                    break;
-                case 3:
-                    result.Append('I', 3);
-                    break;
-                case 4:
-                    result.Append('I').Append('V');
-                    break;
-                case 5:
-                    result.Append('V');
-                    break;
-                case 6:
-                    result.Append('V').Append('I');
-                    break;
-                case 7:
-                    result.Append('V').Append('I', 2);
-                    break;
-                case 8:
-                    result.Append('V').Append('I', 3);
-                    break;
-                case 9:
-                    result.Append('I').Append('X');
-                    break;
-            }
+            ProcessDigit(ref value, 100, 'C', 'D', 'M', result);
+            ProcessDigit(ref value, 10, 'X', 'L', 'C', result);
+            ProcessDigitCore(value, 'I', 'V', 'X', result);
 
             return result.ToString();
         }
