@@ -45,6 +45,26 @@ namespace SampleLibrary
 
             Assert.Equal("MMXVIII", RomanNumbers.IntToRoman(2018));
             Assert.Equal("MMCCCLXV", RomanNumbers.IntToRoman(2365));
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => RomanNumbers.IntToRoman(-1));
+        }
+
+        [Fact]
+        public void RomanToIntTest()
+        {
+            Assert.Equal(0, RomanNumbers.RomanToInt(""));
+
+            Assert.Equal(1, RomanNumbers.RomanToInt("I"));
+            Assert.Equal(2, RomanNumbers.RomanToInt("II"));
+            Assert.Equal(3, RomanNumbers.RomanToInt("III"));
+            Assert.Equal(4, RomanNumbers.RomanToInt("IV"));
+            Assert.Equal(4, RomanNumbers.RomanToInt("IIII"));
+            Assert.Equal(5, RomanNumbers.RomanToInt("V"));
+            Assert.Equal(6, RomanNumbers.RomanToInt("VI"));
+            Assert.Equal(7, RomanNumbers.RomanToInt("VII"));
+            Assert.Equal(8, RomanNumbers.RomanToInt("VIII"));
+            Assert.Equal(9, RomanNumbers.RomanToInt("IX"));
+            Assert.Equal(9, RomanNumbers.RomanToInt("VIIII"));
         }
     }
 }
