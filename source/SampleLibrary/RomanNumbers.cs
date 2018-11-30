@@ -68,6 +68,8 @@ namespace SampleLibrary
             for (; index < input.Length; index++)
             {
                 char c = input[index];
+                if (c >= 'a')
+                    c = (char)(c - 0x20);
 
                 switch (currentState)
                 {
@@ -182,10 +184,16 @@ namespace SampleLibrary
 
             int index = 0;
             for (; index < input.Length; index++)
-                if (input[index] == 'M')
+            {
+                var c = input[index];
+                if (c >= 'a')
+                    c = (char)(c - 0x20);
+
+                if (c == 'M')
                     accumulator += 1000;
                 else
                     break;
+            }
 
             if (index < input.Length)
             {

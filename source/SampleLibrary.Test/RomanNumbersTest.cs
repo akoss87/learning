@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace SampleLibrary
@@ -61,19 +63,27 @@ namespace SampleLibrary
             Assert.Equal(2999, RomanNumbers.RomanToInt("MMCMXCIX"));
             Assert.Equal(2999, RomanNumbers.RomanToInt("MMDCCCCLXXXXVIIII"));
 
-            // TODO: rossz karaktersorozatokat generálni
-            //var random = new Random();
-            //const int minLength = 2;
-            //const int maxLength = 12;
-            //char[] chars = { 'I', 'V', 'X', 'L', 'C', 'D', 'M' };
+            var random = new Random();
+            const int minLength = 2;
+            const int maxLength = 16;
+            char[] chars = { 'I', 'V', 'X', 'L', 'C', 'D', 'M' };
 
-            //for (var i = 0; i < 10000; i++)
-            //{
-            //    var length = minLength + random.Next(maxLength - minLength + 1);
-            //    var buffer = new char[length];
-            //    for (var j = 0; j < buffer.Length; j++)
-            //        buffer[j] = chars[random.Next(chars.Length)];
-            //}
+            for (var i = 0; i < 10000; i++)
+            {
+                var length = minLength + random.Next(maxLength - minLength + 1);
+                var buffer = new char[length];
+                for (var j = 0; j < buffer.Length; j++)
+                    buffer[j] = chars[random.Next(chars.Length)];
+                var romanNumber = new string(buffer);
+
+                var isValid = Regex.IsMatch(romanNumber, @"^M*(|C(C{0,3}|D|M)|DC{0,4})(|X(X{0,3}|L|C)|LX{0,4})(|I(I{0,3}|V|X)|VI{0,4})$");
+                Assert.Equal(isValid, RomanNumbers.TryParseRoman(romanNumber, out var _));
+            }
+
+            Assert.Equal(4567, RomanNumbers.RomanToInt("mMmMdlxvIi"));
+
+            Assert.Throws<ArgumentNullException>(() => RomanNumbers.RomanToInt(null));
+            Assert.Throws<FormatException>(() => RomanNumbers.RomanToInt("XM"));
         }
     }
 }
