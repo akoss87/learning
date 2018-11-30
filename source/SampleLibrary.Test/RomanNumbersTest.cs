@@ -52,19 +52,28 @@ namespace SampleLibrary
         [Fact]
         public void RomanToIntTest()
         {
-            Assert.Equal(0, RomanNumbers.RomanToInt(""));
+            for (var i = 0; i < 1000; i++)
+                Assert.Equal(i, RomanNumbers.RomanToInt(RomanNumbers.IntToRoman(i)));
 
-            Assert.Equal(1, RomanNumbers.RomanToInt("I"));
-            Assert.Equal(2, RomanNumbers.RomanToInt("II"));
-            Assert.Equal(3, RomanNumbers.RomanToInt("III"));
-            Assert.Equal(4, RomanNumbers.RomanToInt("IV"));
-            Assert.Equal(4, RomanNumbers.RomanToInt("IIII"));
-            Assert.Equal(5, RomanNumbers.RomanToInt("V"));
-            Assert.Equal(6, RomanNumbers.RomanToInt("VI"));
-            Assert.Equal(7, RomanNumbers.RomanToInt("VII"));
-            Assert.Equal(8, RomanNumbers.RomanToInt("VIII"));
-            Assert.Equal(9, RomanNumbers.RomanToInt("IX"));
-            Assert.Equal(9, RomanNumbers.RomanToInt("VIIII"));
+            Assert.Equal(1444, RomanNumbers.RomanToInt("MCDXLIV"));
+            Assert.Equal(1444, RomanNumbers.RomanToInt("MCCCCXXXXIIII"));
+
+            Assert.Equal(2999, RomanNumbers.RomanToInt("MMCMXCIX"));
+            Assert.Equal(2999, RomanNumbers.RomanToInt("MMDCCCCLXXXXVIIII"));
+
+            // TODO: rossz karaktersorozatokat generálni
+            //var random = new Random();
+            //const int minLength = 2;
+            //const int maxLength = 12;
+            //char[] chars = { 'I', 'V', 'X', 'L', 'C', 'D', 'M' };
+
+            //for (var i = 0; i < 10000; i++)
+            //{
+            //    var length = minLength + random.Next(maxLength - minLength + 1);
+            //    var buffer = new char[length];
+            //    for (var j = 0; j < buffer.Length; j++)
+            //        buffer[j] = chars[random.Next(chars.Length)];
+            //}
         }
     }
 }

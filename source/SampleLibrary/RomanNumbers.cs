@@ -8,17 +8,17 @@ namespace SampleLibrary
         enum ParseState
         {
             Initial,
-            IRead,
-            IIRead,
-            IIIRead,
-            IIIIRead,
-            IVRead,
-            IXRead,
-            VRead,
-            VIRead,
-            VIIRead,
-            VIIIRead,
-            VIIIIRead,
+            OneUnitRead,
+            TwoUnitsRead,
+            ThreeUnitsRead,
+            FourUnitsRead,
+            UnitAndUnitX5Read,
+            UnitAndUnitX10Read,
+            UnitX5Read,
+            UnitX5AndOneUnitRead,
+            UnitX5AndTwoUnitsRead,
+            UnitX5AndThreeUnitsRead,
+            UnitX5AndFourUnitsRead,
         }
 
         static readonly byte[] s_numberLengths = { 0, 1, 2, 3, 2, 1, 2, 3, 4, 2 };
@@ -61,142 +61,155 @@ namespace SampleLibrary
             return result.ToString();
         }
 
+        static void ParseRomanDigit(string input, ref int index, ref int accumulator, char unit, char unitX5, char unitX10, int unitValue)
+        {
+            ParseState currentState = ParseState.Initial;
+
+            for (; index < input.Length; index++)
+            {
+                char c = input[index];
+
+                switch (currentState)
+                {
+                    case ParseState.Initial:
+                        if (c == unit)
+                            currentState = ParseState.OneUnitRead;
+                        else if (c == unitX5)
+                            currentState = ParseState.UnitX5Read;
+                        else
+                            goto EndOfLoop;
+                        break;
+                    case ParseState.OneUnitRead:
+                        if (c == unit)
+                            currentState = ParseState.TwoUnitsRead;
+                        else if (c == unitX5)
+                            currentState = ParseState.UnitAndUnitX5Read;
+                        else if (c == unitX10)
+                            currentState = ParseState.UnitAndUnitX10Read;
+                        else
+                            goto EndOfLoop;
+                        break;
+                    case ParseState.TwoUnitsRead:
+                        if (c == unit)
+                            currentState = ParseState.ThreeUnitsRead;
+                        else
+                            goto EndOfLoop;
+                        break;
+                    case ParseState.ThreeUnitsRead:
+                        if (c == unit)
+                            currentState = ParseState.FourUnitsRead;
+                        else
+                            goto EndOfLoop;
+                        break;
+                    case ParseState.UnitX5Read:
+                        if (c == unit)
+                            currentState = ParseState.UnitX5AndOneUnitRead;
+                        else
+                            goto EndOfLoop;
+                        break;
+                    case ParseState.UnitX5AndOneUnitRead:
+                        if (c == unit)
+                            currentState = ParseState.UnitX5AndTwoUnitsRead;
+                        else
+                            goto EndOfLoop;
+                        break;
+                    case ParseState.UnitX5AndTwoUnitsRead:
+                        if (c == unit)
+                            currentState = ParseState.UnitX5AndThreeUnitsRead;
+                        else
+                            goto EndOfLoop;
+                        break;
+                    case ParseState.UnitX5AndThreeUnitsRead:
+                        if (c == unit)
+                            currentState = ParseState.UnitX5AndFourUnitsRead;
+                        else
+                            goto EndOfLoop;
+                        break;
+                    case ParseState.UnitAndUnitX5Read:
+                    case ParseState.UnitAndUnitX10Read:
+                    case ParseState.FourUnitsRead:
+                    case ParseState.UnitX5AndFourUnitsRead:
+                        goto EndOfLoop;
+                }
+            }
+            EndOfLoop:
+
+            switch (currentState)
+            {
+                case ParseState.Initial:
+                    return;
+                case ParseState.OneUnitRead:
+                    accumulator += unitValue;
+                    return;
+                case ParseState.TwoUnitsRead:
+                    accumulator += 2 * unitValue;
+                    return;
+                case ParseState.ThreeUnitsRead:
+                    accumulator += 3 * unitValue;
+                    return;
+                case ParseState.FourUnitsRead:
+                case ParseState.UnitAndUnitX5Read:
+                    accumulator += 4 * unitValue;
+                    return;
+                case ParseState.UnitX5Read:
+                    accumulator += 5 * unitValue;
+                    return;
+                case ParseState.UnitX5AndOneUnitRead:
+                    accumulator += 6 * unitValue;
+                    return;
+                case ParseState.UnitX5AndTwoUnitsRead:
+                    accumulator += 7 * unitValue;
+                    return;
+                case ParseState.UnitX5AndThreeUnitsRead:
+                    accumulator += 8 * unitValue;
+                    return;
+                case ParseState.UnitX5AndFourUnitsRead:
+                case ParseState.UnitAndUnitX10Read:
+                    accumulator += 9 * unitValue;
+                    return;
+                default:
+                    // NB: execution should never get here
+                    throw new InvalidOperationException();
+            }
+        }
+
         public static bool TryParseRoman(string input, out int value)
         {
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
 
-            value = 0;
-            ParseState currentState = ParseState.Initial;
+            int accumulator = 0;
 
-            for (int i = 0; i < input.Length; i++)
+            int index = 0;
+            for (; index < input.Length; index++)
+                if (input[index] == 'M')
+                    accumulator += 1000;
+                else
+                    break;
+
+            if (index < input.Length)
             {
-                char c = input[i];
+                ParseRomanDigit(input, ref index, ref accumulator, 'C', 'D', 'M', 100);
 
-                switch (currentState)
+                if (index < input.Length)
                 {
-                    case ParseState.Initial:
-                        if (c == 'I')
+                    ParseRomanDigit(input, ref index, ref accumulator, 'X', 'L', 'C', 10);
+
+                    if (index < input.Length)
+                    {
+                        ParseRomanDigit(input, ref index, ref accumulator, 'I', 'V', 'X', 1);
+
+                        if (index < input.Length)
                         {
-                            currentState = ParseState.IRead;
-                        }
-                        else if (c == 'V')
-                        {
-                            currentState = ParseState.VRead;
-                        }
-                        else
+                            value = default;
                             return false;
-                        break;
-                    case ParseState.IRead:
-                        if (c == 'I')
-                        {
-                            currentState = ParseState.IIRead;
                         }
-                        else if (c == 'V')
-                        {
-                            currentState = ParseState.IVRead;
-                        }
-                        else if (c == 'X')
-                        {
-                            currentState = ParseState.IXRead;
-                        }
-                        else
-                            return false;
-                        break;
-                    case ParseState.IIRead:
-                        if (c == 'I')
-                        {
-                            currentState = ParseState.IIIRead;
-                        }
-                        else
-                            return false;
-                        break;
-                    case ParseState.IIIRead:
-                        if (c == 'I')
-                        {
-                            currentState = ParseState.IIIIRead;
-                        }
-                        else
-                            return false;
-                        break;
-                    case ParseState.VRead:
-                        if (c == 'I')
-                        {
-                            currentState = ParseState.VIRead;
-                        }
-                        else
-                            return false;
-                        break;
-                    case ParseState.VIRead:
-                        if (c == 'I')
-                        {
-                            currentState = ParseState.VIIRead;
-                        }
-                        else
-                            return false;
-                        break;
-                    case ParseState.VIIRead:
-                        if (c == 'I')
-                        {
-                            currentState = ParseState.VIIIRead;
-                        }
-                        else
-                            return false;
-                        break;
-                    case ParseState.VIIIRead:
-                        if (c == 'I')
-                        {
-                            currentState = ParseState.VIIIIRead;
-                        }
-                        else
-                            return false;
-                        break;
-                    case ParseState.IVRead:
-                    case ParseState.IXRead:
-                    case ParseState.IIIIRead:
-                    case ParseState.VIIIIRead:
-                        return false;
+                    }
                 }
             }
 
-            switch (currentState)
-            {
-                case ParseState.Initial:
-                    value = 0;
-                    return true;
-                case ParseState.IRead:
-                    value = 1;
-                    return true;
-                case ParseState.IIRead:
-                    value = 2;
-                    return true;
-                case ParseState.IIIRead:
-                    value = 3;
-                    return true;
-                case ParseState.IIIIRead:
-                case ParseState.IVRead:
-                    value = 4;
-                    return true;
-                case ParseState.VRead:
-                    value = 5;
-                    return true;
-                case ParseState.VIRead:
-                    value = 6;
-                    return true;
-                case ParseState.VIIRead:
-                    value = 7;
-                    return true;
-                case ParseState.VIIIRead:
-                    value = 8;
-                    return true;
-                case ParseState.VIIIIRead:
-                case ParseState.IXRead:
-                    value = 9;
-                    return true;
-                default:
-                    // NB: execution should never get here
-                    throw new InvalidOperationException();
-            }
+            value = accumulator;
+            return true;
         }
 
         public static int RomanToInt(string input)
