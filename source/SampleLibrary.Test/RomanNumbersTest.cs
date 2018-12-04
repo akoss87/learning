@@ -66,7 +66,7 @@ namespace SampleLibrary
             var random = new Random();
             const int minLength = 2;
             const int maxLength = 16;
-            char[] chars = { 'I', 'V', 'X', 'L', 'C', 'D', 'M' };
+            string chars = "IVXLCDM";
 
             for (var i = 0; i < 10000; i++)
             {

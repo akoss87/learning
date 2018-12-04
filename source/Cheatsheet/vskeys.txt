@@ -10,3 +10,12 @@ Refactor
 
 Formázás
 * Ctrl+K+D - az egész dok formázása
+
+Közlekedés (rá kell állni a függvény/property/mező/változó, stb nevére)
+* F12 - Deklarációra ugrik
+* Alt+F12 - Kis ablakban megmutatja a deklarációt
+* Shift+F12 - Megmutatja az összes hivatkozást
+* Ctrl+- - Visszamegy az előző helyre (mint a böngészőben)
+
+Egyéb
+* Ctrl+. - Quick actionöket mutatja meg (pl. usingolás, stb.)

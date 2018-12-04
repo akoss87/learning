@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace pwgen
 {
@@ -15,7 +12,7 @@ namespace pwgen
         {
             int pwLength = 12;
             int pwCount = 1;
-            string pwSet = Alphabet + Alphabet.ToLowerInvariant() + Digits;
+            string pwChars = Alphabet + Alphabet.ToLowerInvariant() + Digits;
 
             if (args.Length == 0)
             {
@@ -23,7 +20,7 @@ namespace pwgen
                 return;
             }
 
-            string option = args[0].ToLowerInvariant());
+            string option = args[0].ToLowerInvariant();
 
             if (option == "-?" || option == "-h" || option == "/?" || option == "/h" || option == "--help")
             {
@@ -31,7 +28,7 @@ namespace pwgen
                 return;
             }
 
-            for (int i = 0; i < args.Length - 1; i++)
+            for (int i = 0; i < args.Length; i++)
             {
                 option = args[i].ToLowerInvariant();
 
@@ -44,7 +41,7 @@ namespace pwgen
                         return;
                     }
 
-                    if (!int.TryParse(args[i], out pwLength))
+                    if (!int.TryParse(args[i], out pwLength) || pwLength < 1)
                     {
                         WriteUsage("Value is invalid for option length.");
                         return;
@@ -59,7 +56,7 @@ namespace pwgen
                         return;
                     }
 
-                    if (!int.TryParse(args[i], out pwCount))
+                    if (!int.TryParse(args[i], out pwCount) || pwCount < 1)
                     {
                         WriteUsage("Value is invalid for option count.");
                         return;
@@ -71,6 +68,21 @@ namespace pwgen
                     return;
                 }
             }
+
+            Random random = new Random();
+            var buffer = new char[pwLength];
+
+            for (; pwCount > 0; pwCount--)
+            {
+                GeneratePassword(buffer, pwChars, random);
+                Console.WriteLine(new string(buffer));
+            }
+        }
+
+        static void GeneratePassword(char[] buffer, string chars, Random random)
+        {
+            for (var j = 0; j < buffer.Length; j++)
+                buffer[j] = chars[random.Next(chars.Length)];
         }
 
         static void WriteUsage(string errorMessage = null)
