@@ -1,0 +1,42 @@
+﻿Tesztelés: http://regexstorm.net/tester
+Reference: https://docs.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference
+Cheetsheet: https://www.mikesdotnetting.com/article/46/c-regular-expressions-cheat-sheet
+
+Escape-elés: \
+Speciális karaktereket escape-elni kell!
+Pl. pont, csillag, mindenféle zárójelek, stb.
+
+Karakterhalmazok (character class):
+* 1db tetszőleges karakter: .
+* 1db karakter a megadott halmazból: [0123456789] vagy [0-9]
+* 1db karakter, ami NINCS benne a megadott halmazban: [^0123456789] vagy [^0-9]
+* 1db whitespace karakter: \s
+* 1db nem-whitespace karakter: \S
+* 1db word karakter: \w
+* 1db nem-word karakter: \W
+
+Találat rögzítése (anchor):
+* A találatnak a string (vagy sor) elején kell kezdődni: ^
+* A találatnak a string (vagy sor) végén kell végződnie: $
+
+Mennyiség megadása (quantifier):
+* A megadott minta 0-szor vagy többször szerepeljen: *
+* A megadott minta 1-szer vagy többször szerepeljen: +
+* A megadott minta egyszer se vagy egyszer szerepeljen: ?
+* A megadott minta n-szer szerepeljen: {n}
+* A megadott minta legalább n-szer szerepeljen: {n,}
+* A megadott minta legalább n-szer, de legfeljebb m-szer szerepeljen: {n,m}
+
+Választás (alternation):
+* Vagy az egyik minta vagy a másik minta szerepeljen: |
+
+Csoportosítás
+* A minták egységként kezelése: ()
+
+------
+
+Mi tartozik egy character classba:
+
+for (char c = '\x0'; c < char.MaxValue; c++)
+	if (Regex.IsMatch(c.ToString(), @"\w"))
+		c.Dump();
