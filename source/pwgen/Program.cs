@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace pwgen
 {
@@ -10,6 +11,8 @@ namespace pwgen
 
         static void Main(string[] args)
         {
+            // "pwgen -l 8 -c 4 -s 0-9a-zA-Z"
+
             int pwLength = 12;
             int pwCount = 1;
             string pwChars = Alphabet + Alphabet.ToLowerInvariant() + Digits;
@@ -62,6 +65,17 @@ namespace pwgen
                         return;
                     }
                 }
+                else if (option == "-s" || option == "--set")
+                {
+                    i++;
+                    if (args.Length <= i)
+                    {
+                        WriteUsage("Value is missing for option character set.");
+                        return;
+                    }
+
+                    pwChars = DeterminePasswordChars(args[i]);
+                }
                 else
                 {
                     WriteUsage($"Option '{option}' is unknown.");
@@ -79,13 +93,43 @@ namespace pwgen
             }
         }
 
-        static void GeneratePassword(char[] buffer, string chars, Random random)
+        private static string DeterminePasswordChars(string pattern)
+        {
+            string pwChars;
+            pattern = "[" + pattern + "]";
+            var regex = new Regex(pattern, RegexOptions.Compiled);
+            var sb = new StringBuilder();
+
+            // a növelés nem történhet az összehasonlítás előtt,
+            // mert különben túlcsordulás miatt c 0-ra változik,
+            // és végtelen ciklusba esünk
+            for (int j = char.MinValue; j++ <= char.MaxValue;)
+            {
+                char c = (char)j;
+                if (regex.IsMatch(c.ToString()))
+                    sb.Append(c);
+            }
+
+            // vagy:
+            //char c = char.MinValue;
+            //do
+            //{
+            //    if (regex.IsMatch(c.ToString()))
+            //        sb.Append(c);
+            //}
+            //while (c++ <= char.MaxValue);
+
+            pwChars = sb.ToString();
+            return pwChars;
+        }
+
+        private static void GeneratePassword(char[] buffer, string chars, Random random)
         {
             for (var j = 0; j < buffer.Length; j++)
                 buffer[j] = chars[random.Next(chars.Length)];
         }
 
-        static void WriteUsage(string errorMessage = null)
+        private static void WriteUsage(string errorMessage = null)
         {
             if (errorMessage != null)
             {
@@ -98,7 +142,7 @@ namespace pwgen
             Console.WriteLine("-?: Help");
             Console.WriteLine("-l, --length: Password length (default = 12)");
             Console.WriteLine("-c, --count: Password count (default = 1)");
-            Console.WriteLine("-s, --set: Characters for password (default = alfanumeric)");
+            Console.WriteLine("-s, --set: Character set for password (default = alfanumeric)");
         }
     }
 }
