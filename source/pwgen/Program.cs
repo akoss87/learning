@@ -103,21 +103,13 @@ namespace pwgen
             // a növelés nem történhet az összehasonlítás előtt,
             // mert különben túlcsordulás miatt c 0-ra változik,
             // és végtelen ciklusba esünk
-            for (int j = char.MinValue; j++ <= char.MaxValue;)
+            char c = char.MinValue;
+            do
             {
-                char c = (char)j;
                 if (regex.IsMatch(c.ToString()))
                     sb.Append(c);
             }
-
-            // vagy:
-            //char c = char.MinValue;
-            //do
-            //{
-            //    if (regex.IsMatch(c.ToString()))
-            //        sb.Append(c);
-            //}
-            //while (c++ <= char.MaxValue);
+            while (c++ < char.MaxValue);
 
             pwChars = sb.ToString();
             return pwChars;
