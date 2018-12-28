@@ -1,4 +1,5 @@
-Primitive types:
+﻿Primitive types:
+----------------
 * bool (System.Boolean) - boolean (true/false)
 
 * sbyte (System.Byte) - signed 8bit integer
@@ -17,12 +18,126 @@ Primitive types:
 * char (System.Char) - 16bit unicode character
 * string (System.String) - string of unicode chars
 
-Enum:
-enumeration of integral values
+Array:
+------
+* Definition: An array stores a fixed-size sequential collection of elements of the same type.
 
-Syntax: enum {Name}[ : {type}] (default: int)
+* Type construction: element_type[]
+
+* Declaration & initialization:
+sbyte[] tomb = new sbyte[3];
+sbyte[] tomb = new sbyte[3] { 3, 4, 1 };
+sbyte[] tomb = new sbyte[] { 3, 4, 1 };
+sbyte[] tomb = { 3, 4, 1 };
+
+* Multi-dimensional -> több dimenziós
+* Jagged array -> array of arrays ("fűrészfogas" tömb)
+
+Enum:
+-----
+* Definition: Enumeration of integral values.
+
+* Syntax: enum {Name}[ : {type}] (default: int)
+
+* Flags enum: [Flags] attribute
 
 Delegate:
-function type
+---------
+* Definition: Function type.
 
-Syntax: delegate {return_type} {Name}({arg_type arg_name}, {arg_type arg_name}, ...)
+* Syntax: delegate {return_type} {Name}({arg_type arg_name}, {arg_type arg_name}, ...)
+
+* Sample 1:
+
+delegate int Operation(int x, int y);
+
+int Add(int value1, int value2)
+{
+	return value1 + value2;
+}
+
+int Subtract(int value1, int value2)
+{
+	return value1 - value2;
+}
+
+void Main()
+{
+	Operation op;
+	op = Add;
+	op(5, 2).Dump();
+
+	op = Subtract;
+	op(5, 11).Dump();
+}
+
+* Sample 2:
+
+delegate int Operation(int x, int y);
+
+int Add(int value1, int value2)
+{
+	return value1 + value2;
+}
+
+int Subtract(int value1, int value2)
+{
+	return value1 - value2;
+}
+
+int Multiply(int value1, int value2)
+{
+	return value1 * value2;
+}
+
+int DivideInt(int value1, int value2)
+{
+	return value1 / value2;
+}
+
+void Main()
+{
+	Operation[] operations = { Add, Subtract, Multiply, DivideInt };
+//  Operation[] operations = new Operation[4] { Add, Subtract, Multiply, DivideInt };
+//	operations[0] = Add;
+//	operations[1] = Subtract;
+//	operations[2] = Multiply;
+//	operations[3] = DivideInt;
+
+	for (int i = 0; i < operations.Length; i++)
+		operations[i](4, 2).Dump();
+}
+
+* Sample 3 (lambda syntax)
+
+delegate int Operation(int x, int y);
+
+void Main()
+{
+	Operation[] operations =
+	{
+		(value1, value2) => value1 + value2,
+		(value1, value2) => value1 - value2,
+        (value1, value2) => value1 * value2,
+        (value1, value2) => value1 / value2
+	};
+
+	for (int i = 0; i < operations.Length; i++)
+		operations[i](4, 2).Dump();
+}
+
+* Sample 4 (generic delegate)
+
+void Main()
+{
+	Func<int, int, int>[] operations =
+	{
+		(value1, value2) => value1 + value2,
+		(value1, value2) => value1 - value2,
+        (value1, value2) => value1 * value2,
+        (value1, value2) => value1 / value2
+	};
+
+	for (int i = 0; i < operations.Length; i++)
+		operations[i](4, 2).Dump();
+}
