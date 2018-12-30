@@ -6,23 +6,31 @@ namespace SampleLibrary
 {
     public static class IntUtils
     {
+        static readonly int[] s_powersOfTen = new int[10] { 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000 };
+
         public static int ToIntSafe(double x)
         {
             return checked((int)x);
         }
 
-        public static int RoundToTens(int value)
+        public static int Round(int value, int digits)
         {
-            //return checked((int)Math.Round(x/10.0, MidpointRounding.AwayFromZero) * 10);
+            if (digits < 0 || digits > 9)
+                throw new ArgumentOutOfRangeException(nameof(digits));
 
-            value = Math.DivRem(value, 10, out var lastDigit);
+            if (digits == 0)
+                return value;
 
-            if (lastDigit >= 5)
+            var power = s_powersOfTen[digits];
+            var halfOfPower = power / 2;
+
+            value = Math.DivRem(value, power, out int remainder);
+            if (remainder >= halfOfPower)
                 value++;
-            else if (lastDigit <= -5)
+            else if (-remainder >= halfOfPower)
                 value--;
 
-            checked { value *= 10; }
+            checked { value *= power; }
 
             return value;
         }
