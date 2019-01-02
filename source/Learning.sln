@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleLibrary", "SampleLibr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pwgen", "pwgen\pwgen.csproj", "{29933E3E-D6E1-4CAC-963A-C5424531F3BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScaleTrainer", "ScaleTrainer\ScaleTrainer.csproj", "{C1EA0A7F-8EB8-44F0-88D9-98B4045C10AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{29933E3E-D6E1-4CAC-963A-C5424531F3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29933E3E-D6E1-4CAC-963A-C5424531F3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29933E3E-D6E1-4CAC-963A-C5424531F3BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1EA0A7F-8EB8-44F0-88D9-98B4045C10AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1EA0A7F-8EB8-44F0-88D9-98B4045C10AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1EA0A7F-8EB8-44F0-88D9-98B4045C10AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1EA0A7F-8EB8-44F0-88D9-98B4045C10AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
