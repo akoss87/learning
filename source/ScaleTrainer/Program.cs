@@ -2,60 +2,33 @@
 using System.ComponentModel;
 using System.Reflection;
 
+using static ScaleTrainer.Interval;
+using static ScaleTrainer.DiatonicMode;
+
 namespace ScaleTrainer
 {
-    enum DiatonicMode
-    {
-        [Description("Ionian (Major)")]
-        Ionian,
-        [Description("Dorian")]
-        Dorian,
-        [Description("Phrygian")]
-        Phrygian,
-        [Description("Lydian")]
-        Lydian,
-        [Description("Mixolydian")]
-        Mixolydian,
-        [Description("Aeolian (Minor)")]
-        Aeolian,
-        [Description("Locrian")]
-        Locrian,
-    }
-
-    enum Distance
-    {
-        PerfectUnison,
-        MinorSecond,
-        MajorSecond,
-        MinorThird,
-        MajorThird,
-        PerfectFourth,
-        Tritone,
-        PerfectFifth,
-        MinorSixth,
-        MajorSixth,
-        MinorSeventh,
-        MajorSeventh,
-        PerfectOctave,
-    }
-
     class Program
     {
-        static readonly Distance[] s_majorScaleDistances = new Distance[7]
-        {
-            Distance.MajorSecond,
-            Distance.MajorSecond,
-            Distance.MinorSecond,
-            Distance.MajorSecond,
-            Distance.MajorSecond,
-            Distance.MajorSecond,
-            Distance.MinorSecond,
-        };
+        static readonly int[] s_majorScaleIntervals = new int[7] { MajorSecond, MajorSecond, MinorSecond, MajorSecond, MajorSecond, MajorSecond, MinorSecond };
 
         static readonly string[] s_notesSharp = new string[12] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
         static readonly string[] s_notesFlat = new string[12] { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" };
 
         static void Main(string[] args)
+        {
+            if (args.Length > 0)
+                switch (args[0].ToLowerInvariant())
+                {
+                    case "--print-majors":
+                        PrintDiatonicScales(Ionian);
+                        break;
+                    case "--print-minors":
+                        PrintDiatonicScales(Aeolian);
+                        break;
+                }
+        }
+
+        static void Transpose(ref int noteIndex, int interval)
         {
             // kis tercet lép felfelé
             //var noteIndex = 11;
@@ -69,29 +42,15 @@ namespace ScaleTrainer
             //if (noteIndex < 0)
             //    noteIndex += s_notesSharp.Length;
 
-            if (args.Length > 0)
-                switch (args[0].ToLowerInvariant())
-                {
-                    case "--print-majors":
-                        PrintDiatonicScales(DiatonicMode.Ionian);
-                        break;
-                    case "--print-minors":
-                        PrintDiatonicScales(DiatonicMode.Aeolian);
-                        break;
-                }
-        }
+            noteIndex += interval;
 
-        static void Transpose(ref int noteIndex, Distance distance, bool up)
-        {
-            if (up)
+            if (interval >= 0)
             {
-                noteIndex += (int)distance;
                 if (noteIndex >= s_notesSharp.Length)
                     noteIndex -= s_notesSharp.Length;
             }
             else
             {
-                noteIndex -= (int)distance;
                 if (noteIndex < 0)
                     noteIndex += s_notesSharp.Length;
             }
@@ -99,11 +58,11 @@ namespace ScaleTrainer
 
         private static void PrintDiatonicScales(DiatonicMode diatonicMode)
         {
-            int distanceIndex = (int)diatonicMode;
+            int intervalIndex = (int)diatonicMode;
 
             var rootNoteIndex = 0;
-            for (int i = 0; i < distanceIndex; i++)
-                Transpose(ref rootNoteIndex, s_majorScaleDistances[i], up: true);
+            for (int i = 0; i < intervalIndex; i++)
+                Transpose(ref rootNoteIndex, s_majorScaleIntervals[i]);
 
             FieldInfo field = typeof(DiatonicMode).GetField(diatonicMode.ToString());
             var scaleName = field.GetCustomAttribute<DescriptionAttribute>().Description;
@@ -113,30 +72,30 @@ namespace ScaleTrainer
             Console.WriteLine();
 
             for (var i = 0; i < 6; i++)
-                Transpose(ref rootNoteIndex, Distance.PerfectFourth, up: true);
+                Transpose(ref rootNoteIndex, PerfectFourth);
 
             for (var i = 6; i > 0; i--)
             {
                 Console.Write("[{0}b] ", i);
-                PrintScale(distanceIndex, rootNoteIndex, s_notesFlat);
-                Transpose(ref rootNoteIndex, Distance.PerfectFourth, up: false);
+                PrintScale(intervalIndex, rootNoteIndex, s_notesFlat);
+                Transpose(ref rootNoteIndex, -PerfectFourth);
             }
 
             Console.Write("[ {0}] ", 0);
-            PrintScale(distanceIndex, rootNoteIndex, s_notesSharp);
+            PrintScale(intervalIndex, rootNoteIndex, s_notesSharp);
 
-            Transpose(ref rootNoteIndex, Distance.PerfectFifth, up: true);
+            Transpose(ref rootNoteIndex, PerfectFifth);
             for (var i = 1; i < 7; i++)
             {
                 Console.Write("[{0}#] ", i);
-                PrintScale(distanceIndex, rootNoteIndex, s_notesSharp);
-                Transpose(ref rootNoteIndex, Distance.PerfectFifth, up: true);
+                PrintScale(intervalIndex, rootNoteIndex, s_notesSharp);
+                Transpose(ref rootNoteIndex, PerfectFifth);
             }
         }
 
-        private static void PrintScale(int distanceIndex, int noteIndex, string[] notes)
+        private static void PrintScale(int intervalIndex, int noteIndex, string[] notes)
         {
-            int steps = s_majorScaleDistances.Length;
+            int steps = s_majorScaleIntervals.Length;
 
             for (; ; )
             {
@@ -146,11 +105,11 @@ namespace ScaleTrainer
                 if (steps == 0)
                     break;
 
-                Transpose(ref noteIndex, s_majorScaleDistances[distanceIndex], up: true);
+                Transpose(ref noteIndex, s_majorScaleIntervals[intervalIndex]);
 
-                distanceIndex++;
-                if (distanceIndex >= s_majorScaleDistances.Length)
-                    distanceIndex = 0;
+                intervalIndex++;
+                if (intervalIndex >= s_majorScaleIntervals.Length)
+                    intervalIndex = 0;
 
                 steps--;
             }
