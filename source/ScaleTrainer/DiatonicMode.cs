@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ScaleTrainer
 {
-    enum DiatonicMode
+    public enum DiatonicMode : sbyte
     {
         [Description("Ionian (Major)")]
         Ionian,
@@ -18,5 +19,17 @@ namespace ScaleTrainer
         Aeolian,
         [Description("Locrian")]
         Locrian,
+        
+        Major = Ionian,
+        Minor = Aeolian
+    }
+
+    public static class DiatonicModeExtensions
+    {
+        public static string GetName(this DiatonicMode mode)
+        {
+            FieldInfo field = typeof(DiatonicMode).GetField(mode.ToString());
+            return field.GetCustomAttribute<DescriptionAttribute>().Description;
+        }
     }
 }
